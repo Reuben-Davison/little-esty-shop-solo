@@ -124,6 +124,10 @@ describe "merchant dashboard page" do
       end
     end
 
+    it "has a link to discount page" do 
+      
+    end
+
     it "displays item invoice dates", :vcr do
       within ".items_ready_to_ship" do
         expect(page).to have_content("Thursday, April 14, 2022")
