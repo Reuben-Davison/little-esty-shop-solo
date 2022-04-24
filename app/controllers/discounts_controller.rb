@@ -6,6 +6,11 @@ class DiscountsController < ApplicationController
 
     def new 
     end
+    
+    def destroy  
+        Discount.destroy(params[:id])
+        redirect_to "/merchants/#{params[:merchant_id]}/discounts"
+    end
 
     def create 
         merchant = Merchant.find(params[:merchant_id])

@@ -9,7 +9,8 @@
             <h4> Threshold: <%= discount.threshold %>
             <br>
             Percentage: <%= discount.percentage %> </h4>
+            <%= button_to "Delete", "/merchants/#{@merchant.id}/discounts/#{discount.id}", method: :delete %>
             <hr>
-            <% end %>
     </div>
+            <% end %>
 

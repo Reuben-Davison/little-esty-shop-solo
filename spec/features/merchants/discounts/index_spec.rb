@@ -27,4 +27,20 @@ RSpec.describe "Discounts index page" do
         click_link "Create New Discount"
         expect(current_path).to eq("/merchants/#{merch1.id}/discounts/new")
     end
+
+    it 'has a button to delete the discount' do 
+        merch1 = Merchant.create!(name: "Rob")
+
+        discount1 = merch1.discounts.create!(threshold: 10, percentage: 25)
+        discount2 = merch1.discounts.create!(threshold: 5, percentage: 5)
+        discount3 = merch1.discounts.create!(threshold: 5, percentage: 5)
+        discount4 = merch1.discounts.create!(threshold: 5, percentage: 5)
+        visit "merchants/#{merch1.id}/discounts/"
+        within("##{discount1.id}") do 
+            click_on("Delete")
+        end 
+        expect(current_path).to eq("/merchants/#{merch1.id}/discounts")
+        expect(page).to_not have_content("#{discount1.id}")
+        save_and_open_page
+    end
 end
