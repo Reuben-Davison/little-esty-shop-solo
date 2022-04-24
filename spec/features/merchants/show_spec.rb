@@ -125,7 +125,8 @@ describe "merchant dashboard page" do
     end
 
     it "has a link to discount page" do 
-      
+      click_link "Discounts"
+      expect(current_path).to eq("/merchants/#{@merchant_1.id}/discounts")
     end
 
     it "displays item invoice dates", :vcr do
