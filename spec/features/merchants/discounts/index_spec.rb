@@ -15,10 +15,16 @@ RSpec.describe "Discounts index page" do
         expect(page).to have_content("#{discount4.id}")
         expect(page).to have_content("#{discount3.id}")
         expect(page).to_not have_content("#{discount2.id}")
-        save_and_open_page
         within "##{discount1.id}" do 
             expect(page).to have_content("#{discount1.percentage}")
             expect(page).to have_content("#{discount1.threshold}")
         end 
+    end
+    it "has a link to create a new discount" do
+        merch1 = Merchant.create!(name: "Rob")
+        visit "merchants/#{merch1.id}/discounts/"
+
+        click_link "Create New Discount"
+        expect(current_path).to eq("/merchants/#{merch1.id}/discounts/new")
     end
 end
