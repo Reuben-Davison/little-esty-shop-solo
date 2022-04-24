@@ -6,6 +6,10 @@ class DiscountsController < ApplicationController
 
     def new 
     end
+
+    def show 
+        @discount = Discount.find(params[:id])
+    end
     
     def destroy  
         Discount.destroy(params[:id])
