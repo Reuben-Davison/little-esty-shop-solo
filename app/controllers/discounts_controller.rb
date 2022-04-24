@@ -8,7 +8,6 @@ class DiscountsController < ApplicationController
     end
 
     def create 
-        binding.pry
         merchant = Merchant.find(params[:merchant_id])
         discount = merchant.discounts.new(discount_params)
 
