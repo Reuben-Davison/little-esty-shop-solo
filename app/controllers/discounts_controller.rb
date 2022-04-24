@@ -5,6 +5,23 @@ class DiscountsController < ApplicationController
     end 
 
     def new 
+    end
 
+    def create 
+        binding.pry
+        merchant = Merchant.find(params[:merchant_id])
+        discount = merchant.discounts.new(discount_params)
+
+        if discount.save
+        redirect_to "/merchants/#{merchant.id}/discounts"
+        else
+        flash[:alert] = "Error: Please fill in fields correctly"
+        redirect_to "/merchants/#{merchant.id}/discounts/new"
+        end
+    end   
+
+    private 
+    def discount_params 
+            params.permit(:threshold, :percentage) 
     end
 end
