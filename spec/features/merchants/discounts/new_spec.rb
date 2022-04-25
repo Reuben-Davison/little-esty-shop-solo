@@ -23,7 +23,6 @@ RSpec.describe 'New discount page' do
         fill_in "threshold",	with: "14" 
         fill_in "percentage",	with: "101" 
         click_button 'Create'
-        binding.pry
         expect(page).to have_content('Error: Please fill in fields correctly') 
     end
 end
