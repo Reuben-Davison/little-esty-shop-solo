@@ -18,6 +18,10 @@ RSpec.describe Invoice do
         created_at: Date.current,
         updated_at: Date.current
       )
+
+      @discount = @merchant_1.discounts.create!(threshold: 5, percentage: 20)
+      @discount = @merchant_1.discounts.create!(threshold: 10, percentage: 50)
+
       @merchant_2 = Merchant.create!(
         name: "Erots",
         created_at: Date.current,
@@ -132,6 +136,10 @@ RSpec.describe Invoice do
       it "determines if there are any unshipped invoice items" do
         expect(@invoice_3.has_items_not_shipped).to eq(true)
         expect(@invoice_1.has_items_not_shipped).to eq(false)
+      end
+
+      it 'calculates the discounted revenue for that invoice' do 
+        expect(@invoice_1.discounted_rev).to eq(2820)
       end
     end
 

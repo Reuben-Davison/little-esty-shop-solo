@@ -5,6 +5,9 @@ describe "invoice show page" do
     @merchant_1 = Merchant.create!(
       name: "Store Store",
     )
+
+    @discount = @merchant_1.discounts.create!(threshold: 5, percentage: 50)
+
     @merchant_2 = Merchant.create!(
       name: "Erots",
     )
@@ -128,6 +131,12 @@ describe "invoice show page" do
       expect(page).to have_content("Status: shipped")
       expect(page).to_not have_content("Status: packaged")
       expect(current_path).to eq("/merchants/#{@merchant_1.id}/invoices/#{@invoice_1.id}")
+    end
+  end
+
+  it 'displays discounted revenue' do 
+    within("#discounted_rev") do 
+      expect(page).to have_content("Discounted revenue: $2820")
     end
   end
 end

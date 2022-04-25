@@ -41,6 +41,5 @@ RSpec.describe "Discounts index page" do
         end 
         expect(current_path).to eq("/merchants/#{merch1.id}/discounts")
         expect(page).to_not have_content("#{discount1.id}")
-        save_and_open_page
     end
 end

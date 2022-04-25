@@ -6,6 +6,7 @@ class Invoice < ApplicationRecord
   has_many :merchants, through: :items
   has_many :transactions
   belongs_to :customer
+  has_many :discounts, through: :merchants
 
   enum status: {"in_progress" => 0, "completed" => 1, "cancelled" => 2}
 
@@ -22,5 +23,10 @@ class Invoice < ApplicationRecord
 
   def self.oldest_first
     Invoice.order(:created_at)
+  end
+
+  def discounted_rev 
+    binding.pry
+    discount = invoice_items 
   end
 end
