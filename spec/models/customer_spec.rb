@@ -2,13 +2,6 @@ require "rails_helper"
 
 RSpec.describe Customer do
   before :each do
-    InvoiceItem.destroy_all
-    Item.destroy_all
-    Merchant.destroy_all
-    Transaction.destroy_all
-    Invoice.destroy_all
-    Customer.destroy_all
-
     @merch_1 = Merchant.create!(name: "Two-Legs Fashion")
 
     @item_1 = @merch_1.items.create!(name: "Two-Leg Pantaloons", description: "pants built for people with two legs", unit_price: 5000)
