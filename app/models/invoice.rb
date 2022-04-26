@@ -25,6 +25,7 @@ class Invoice < ApplicationRecord
     Invoice.order(:created_at)
   end
 
+
   def savings 
     sum = 0 
     self.invoice_items.each do |ii| 
@@ -39,4 +40,5 @@ class Invoice < ApplicationRecord
   def discounted_rev 
    invoice_total - (savings.to_f / 100)
   end
+
 end

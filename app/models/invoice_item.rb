@@ -15,6 +15,10 @@ class InvoiceItem < ApplicationRecord
 
   def best_discount 
     quantity = self.quantity
-    discounts.where("discounts.threshold <= ?", quantity).order("discounts.percentage").last
+    discounts.where("discounts.threshold <= ?", quantity)
+    .order("discounts.percentage")
+    .last
   end
+  
+
 end
