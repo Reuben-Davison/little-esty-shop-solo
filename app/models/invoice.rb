@@ -30,15 +30,34 @@ class Invoice < ApplicationRecord
     sum = 0 
     self.invoice_items.each do |ii| 
       if ii.best_discount != nil 
-        disc = ii.best_discount.percentage.to_f / 100
-        sum += (ii.unit_price * ii.quantity) * disc 
+        percent = ii.best_discount.percentage.to_f / 100
+        sum += (ii.unit_price * ii.quantity) * percent 
+      end 
+    end 
+    sum 
+  end
+  
+  def discounted_rev 
+   invoice_total - (savings.to_f / 100)
+  end
+
+
+
+  
+  def merch_savings(merch) 
+    sum = 0 
+    merchant = self.merchants.find[("#{merch.id}".to_i)]
+    merchant.invoice_items.each do |ii| 
+      if ii.best_discount != nil 
+        percent = ii.best_discount.percentage.to_f / 100
+        sum += (ii.unit_price * ii.quantity) * percent 
       end 
     end 
     sum 
   end
 
-  def discounted_rev 
-   invoice_total - (savings.to_f / 100)
+  def merch_discounted_rev(merch) 
+   invoice_total - (merch_savings(merch).to_f / 100)
   end
 
 end
