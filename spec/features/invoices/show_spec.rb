@@ -136,8 +136,14 @@ describe "invoice show page" do
 
   it 'displays discounted revenue' do 
     within("#discounted_rev") do 
-      save_and_open_page
       expect(page).to have_content("Discounted revenue: $2820")
+    end
+  end
+
+  it 'has a link to the discount show page' do 
+    within("#ii-#{@invoice_item_2.id}") do
+      click_link 'Discount'
+      expect(current_path).to eq("/merchants/#{@merchant_1.id}/discounts/#{@discount.id}")
     end
   end
 end

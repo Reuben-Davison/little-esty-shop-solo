@@ -19,6 +19,7 @@
   <% @invoice.invoice_items.each do |ii| %>
   <div id="ii-<%= ii.id %>">
     <h2><%= ii.item.name %></h2>
+    <h3> <% if ii.best_discount != nil  %> <%= link_to "Discount", "/merchants/#{ii.merchant.id}/discounts/#{ii.best_discount.id}"%> <% end %></h3>
     <p>Quantity: <strong><%= ii.quantity %></strong></p>
     <p>Sold for: <strong>$<%= '%.2f' % (ii.unit_price / 100.0) %></strong> each</p>
     <p>Status: <strong><%= ii.status %></strong></p>
