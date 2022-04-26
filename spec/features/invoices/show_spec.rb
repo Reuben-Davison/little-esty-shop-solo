@@ -136,7 +136,8 @@ describe "invoice show page" do
 
   it 'displays discounted revenue' do 
     within("#discounted_rev") do 
-      expect(page).to have_content("Discounted revenue: $2820")
+      binding.pry
+      expect(page).to have_content("Store Store's discounted revenue: $2820")
     end
   end
 

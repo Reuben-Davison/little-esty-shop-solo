@@ -46,7 +46,7 @@ class Invoice < ApplicationRecord
 
   def merch_savings(merch) 
     sum = 0 
-    merchant = self.merchants.find(merch.id)
+    merchant = merchants.find(merch.id)
     merchant.invoice_items.each do |ii| 
       if ii.best_discount != nil 
         percent = ii.best_discount.percentage.to_f / 100
@@ -56,15 +56,15 @@ class Invoice < ApplicationRecord
     sum.to_f / 100
   end
 
-  def merch_invoice_total(merch)
-    binding.pry
-    merchant = self.merchants.find(merch.id)
+  def merch_invoice_total(merch, invoice)
+    merchant = merchants.find(merch.id)
     merchant.invoice_items
+    .where("invoice_id = ?", invoice.id)
     .sum("invoice_items.unit_price * invoice_items.quantity") / 100
   end
 
-  def merch_discounted_rev(merch) 
-   merch_invoice_total(merch) - merch_savings(merch)
+  def merch_discounted_rev(merch, invoice) 
+   merch_invoice_total(merch, invoice) - merch_savings(merch)
   end
 
 end

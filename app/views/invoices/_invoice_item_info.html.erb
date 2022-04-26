@@ -1,7 +1,6 @@
 <h2>
   For customer: <%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %>
 </h2>
-<%= binding.pry %>
 <hr/>
 
 <h3>
@@ -36,5 +35,7 @@
 </div>
 
 <div id="discounted_rev">
-<h2>Discounted revenue: $<%= '%.2f' % @invoice.discounted_rev %></h2>
+<% @invoice.merchants.uniq.each do |merchant| %>
+<h2> <%= merchant.name %>'s discounted revenue: $<%= '%.2f' % @invoice.merch_discounted_rev(merchant, @invoice) %></h2>
+<% end %>
 </div>
