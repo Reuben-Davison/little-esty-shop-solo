@@ -34,11 +34,11 @@ class Invoice < ApplicationRecord
         sum += (ii.unit_price * ii.quantity) * percent 
       end 
     end 
-    sum 
+    sum.to_f / 100
   end
   
   def discounted_rev 
-   invoice_total - (savings.to_f / 100)
+   invoice_total - savings
   end
 
 
@@ -53,16 +53,18 @@ class Invoice < ApplicationRecord
         sum += (ii.unit_price * ii.quantity) * percent 
       end 
     end 
-    sum 
+    sum.to_f / 100
   end
 
   def merch_invoice_total(merch)
+    binding.pry
     merchant = self.merchants.find(merch.id)
-    merchant.invoice_items.sum("invoice_items.unit_price * invoice_items.quantity") /100
+    merchant.invoice_items
+    .sum("invoice_items.unit_price * invoice_items.quantity") / 100
   end
 
   def merch_discounted_rev(merch) 
-   merch_invoice_total - (merch_savings(merch).to_f / 100)
+   merch_invoice_total(merch) - merch_savings(merch)
   end
 
 end
