@@ -131,5 +131,7 @@ RSpec.describe "Invoice Show Page" do
     end
   end
 
-  it "has the total revenue to that invoice"
+  it "has the total discounted revenue to that invoice" do 
+    expect(page).to have_content("Total Discounted Revenue: $5320.00")
+  end
 end
