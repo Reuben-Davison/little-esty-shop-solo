@@ -5,6 +5,9 @@ describe "invoice show page" do
     @merchant_1 = Merchant.create!(
       name: "Store Store",
     )
+
+    @discount = @merchant_1.discounts.create!(threshold: 5, percentage: 50)
+
     @merchant_2 = Merchant.create!(
       name: "Erots",
     )
@@ -93,25 +96,31 @@ describe "invoice show page" do
     within("#ii-#{@invoice_item_1.id}") do
       expect(page).to have_content("Soccer Ball")
       expect(page).to have_content("Quantity: 1")
-      expect(page).to have_content("Sold for: $320.0 each")
+      expect(page).to have_content("Sold for: $320.00 each")
       expect(page).to have_content("Status: packaged")
     end
     within("#ii-#{@invoice_item_2.id}") do
       expect(page).to have_content("Cup")
       expect(page).to have_content("Quantity: 50")
-      expect(page).to have_content("Sold for: $100.0 each")
+      expect(page).to have_content("Sold for: $100.00 each")
       expect(page).to have_content("Status: packaged")
     end
     within("#invoice_items") do
       expect(page).not_to have_content("Beer")
       expect(page).not_to have_content("Quantity: 2")
-      expect(page).not_to have_content("Sold for: $1.0 each")
+      expect(page).not_to have_content("Sold for: $1.00 each")
     end
   end
 
   it "displays the total revenue to be made by all items on the invoice", :vcr do
     within("#total_revenue") do
-      expect(page).to have_content("Total: $5320.0")
+      expect(page).to have_content("Total: $5320.00")
+    end
+  end
+
+  it "displays the total revenue by merchant", :vcr do
+    within("#merchant_rev") do
+      expect(page).to have_content("total revenue: $5320.00")
     end
   end
 
@@ -128,6 +137,19 @@ describe "invoice show page" do
       expect(page).to have_content("Status: shipped")
       expect(page).to_not have_content("Status: packaged")
       expect(current_path).to eq("/merchants/#{@merchant_1.id}/invoices/#{@invoice_1.id}")
+    end
+  end
+
+  it 'displays discounted revenue' do 
+    within("#discounted_rev") do 
+      expect(page).to have_content("Store Store's discounted revenue: $2820")
+    end
+  end
+
+  it 'has a link to the discount show page' do 
+    within("#ii-#{@invoice_item_2.id}") do
+      click_link 'Discount'
+      expect(current_path).to eq("/merchants/#{@merchant_1.id}/discounts/#{@discount.id}")
     end
   end
 end

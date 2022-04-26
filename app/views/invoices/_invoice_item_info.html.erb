@@ -1,7 +1,6 @@
 <h2>
   For customer: <%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %>
 </h2>
-
 <hr/>
 
 <h3>
@@ -19,8 +18,9 @@
   <% @invoice.invoice_items.each do |ii| %>
   <div id="ii-<%= ii.id %>">
     <h2><%= ii.item.name %></h2>
+    <h3> <% if ii.best_discount != nil  %> <%= link_to "Discount", "/merchants/#{ii.merchant.id}/discounts/#{ii.best_discount.id}"%> <% end %></h3>
     <p>Quantity: <strong><%= ii.quantity %></strong></p>
-    <p>Sold for: <strong>$<%= ii.unit_price / 100.0 %></strong> each</p>
+    <p>Sold for: <strong>$<%= '%.2f' % (ii.unit_price / 100.0) %></strong> each</p>
     <p>Status: <strong><%= ii.status %></strong></p>
     <p>Status:<%= form_with url: "/merchants/#{ii.merchant.id}/invoice_items/#{ii.id}", method: :patch, local: true do |f| %>
       <%= f.select(:status, ['pending', 'packaged', 'shipped'], selected: "#{ii.status}") %>
@@ -31,5 +31,17 @@
 <% end %>
 
 <div id="total_revenue">
-  <h1> Total: $<%= @invoice.invoice_total %> </h1>
+  <h1> Total: $<%= '%.2f' % @invoice.invoice_total %> </h1>
+</div>
+
+<div id="merchant_rev">
+<% @invoice.merchants.uniq.each do |merchant| %>
+<h2> <%= merchant.name %>'s total revenue: $<%= '%.2f' % @invoice.merch_invoice_total(merchant, @invoice) %></h2>
+<% end %>
+</div>
+
+<div id="discounted_rev">
+<% @invoice.merchants.uniq.each do |merchant| %>
+<h2> <%= merchant.name %>'s discounted revenue: $<%= '%.2f' % @invoice.merch_discounted_rev(merchant, @invoice) %></h2>
+<% end %>
 </div>

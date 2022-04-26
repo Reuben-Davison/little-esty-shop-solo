@@ -18,6 +18,10 @@ RSpec.describe Invoice do
         created_at: Date.current,
         updated_at: Date.current
       )
+
+      @discount = @merchant_1.discounts.create!(threshold: 5, percentage: 20)
+      @discount = @merchant_1.discounts.create!(threshold: 10, percentage: 50)
+
       @merchant_2 = Merchant.create!(
         name: "Erots",
         created_at: Date.current,
@@ -133,12 +137,72 @@ RSpec.describe Invoice do
         expect(@invoice_3.has_items_not_shipped).to eq(true)
         expect(@invoice_1.has_items_not_shipped).to eq(false)
       end
-    end
 
+    end
+   
     describe "-class" do
       it "orders invoices by oldest to newest" do
         expect(Invoice.oldest_first).to eq([@invoice_3, @invoice_1, @invoice_2])
       end
     end
+  end
+
+  it 'calculates the discounted revenue for that invoice' do 
+    merch = Merchant.create!(name: "Safeway")
+    merch2 = Merchant.create!(name: "Walmart")
+    customer = Customer.create!(first_name: "Rob", last_name: "Danger")
+    invoice = customer.invoices.create!(status:1)
+    discount1 = merch.discounts.create!(threshold: 5, percentage: 20)
+    discount2 = merch.discounts.create!(threshold: 10, percentage: 70)
+    discount3 = merch.discounts.create!(threshold: 40, percentage: 50)
+    discount4 = merch2.discounts.create!(threshold: 5, percentage: 50)
+    item1 = merch.items.create!(name: "abc", description: "thing", unit_price: 500)
+    item2 = merch.items.create!(name: "efg", description: "other", unit_price: 2300)
+    item3 = merch2.items.create!(name: "hij", description: "next", unit_price: 700)
+    ii = item1.invoice_items.create!(invoice_id: invoice.id, quantity: 50, unit_price: item1.unit_price, status: 2)
+    ii2 = item2.invoice_items.create!(invoice_id: invoice.id, quantity: 1, unit_price: item2.unit_price, status: 2)
+    ii3 = item3.invoice_items.create!(invoice_id: invoice.id, quantity: 9, unit_price: item3.unit_price, status: 2)
+    expect(invoice.savings).to eq(206.5)
+    expect(invoice.discounted_rev).to eq(129.5)
+  end
+
+  it 'calculates the discounted revenue for that invoice based on merchant' do 
+    merch = Merchant.create!(name: "Safeway")
+    merch2 = Merchant.create!(name: "Walmart")
+    customer = Customer.create!(first_name: "Rob", last_name: "Danger")
+    invoice = customer.invoices.create!(status:1)
+    discount1 = merch.discounts.create!(threshold: 5, percentage: 20)
+    discount2 = merch.discounts.create!(threshold: 10, percentage: 70)
+    discount3 = merch.discounts.create!(threshold: 40, percentage: 50)
+    discount4 = merch2.discounts.create!(threshold: 5, percentage: 50)
+    item1 = merch.items.create!(name: "abc", description: "thing", unit_price: 500)
+    item2 = merch.items.create!(name: "efg", description: "other", unit_price: 2300)
+    item3 = merch2.items.create!(name: "hij", description: "next", unit_price: 700)
+    ii = item1.invoice_items.create!(invoice_id: invoice.id, quantity: 50, unit_price: item1.unit_price, status: 2)
+    ii2 = item2.invoice_items.create!(invoice_id: invoice.id, quantity: 1, unit_price: item2.unit_price, status: 2)
+    ii3 = item3.invoice_items.create!(invoice_id: invoice.id, quantity: 9, unit_price: item3.unit_price, status: 2)
+    expect(invoice.merch_savings(merch)).to eq(175.0)
+    expect(invoice.merch_savings(merch2)).to eq(31.5)
+    expect(invoice.merch_discounted_rev(merch)).to eq(98.0)
+    expect(invoice.merch_discounted_rev(merch2)).to eq(31.5)
+  end
+
+  it 'calculates the total of each merchant on an invoice' do 
+    merch = Merchant.create!(name: "Safeway")
+    merch2 = Merchant.create!(name: "Walmart")
+    customer = Customer.create!(first_name: "Rob", last_name: "Danger")
+    invoice = customer.invoices.create!(status:1)
+    discount1 = merch.discounts.create!(threshold: 5, percentage: 20)
+    discount2 = merch.discounts.create!(threshold: 10, percentage: 70)
+    discount3 = merch.discounts.create!(threshold: 40, percentage: 50)
+    discount4 = merch2.discounts.create!(threshold: 5, percentage: 50)
+    item1 = merch.items.create!(name: "abc", description: "thing", unit_price: 500)
+    item2 = merch.items.create!(name: "efg", description: "other", unit_price: 2300)
+    item3 = merch2.items.create!(name: "hij", description: "next", unit_price: 700)
+    ii = item1.invoice_items.create!(invoice_id: invoice.id, quantity: 50, unit_price: item1.unit_price, status: 2)
+    ii2 = item2.invoice_items.create!(invoice_id: invoice.id, quantity: 1, unit_price: item2.unit_price, status: 2)
+    ii3 = item3.invoice_items.create!(invoice_id: invoice.id, quantity: 9, unit_price: item3.unit_price, status: 2)
+    expect(invoice.merch_invoice_total(merch)).to eq(273)
+    expect(invoice.merch_invoice_total(merch2)).to eq(63)
   end
 end
