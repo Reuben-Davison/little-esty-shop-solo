@@ -25,8 +25,18 @@ class Invoice < ApplicationRecord
     Invoice.order(:created_at)
   end
 
+  def savings 
+    sum = 0 
+    self.invoice_items.each do |ii| 
+      if ii.best_discount != nil 
+        disc = ii.best_discount.percentage.to_f / 100
+        sum += (ii.unit_price * ii.quantity) * disc 
+      end 
+    end 
+    sum 
+  end
+
   def discounted_rev 
-    binding.pry
-    discount = invoice_items 
+   invoice_total - (savings.to_f / 100)
   end
 end

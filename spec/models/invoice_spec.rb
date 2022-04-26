@@ -138,10 +138,26 @@ RSpec.describe Invoice do
         expect(@invoice_1.has_items_not_shipped).to eq(false)
       end
 
-      it 'calculates the discounted revenue for that invoice' do 
-        expect(@invoice_1.discounted_rev).to eq(2820)
-      end
     end
+    
+    it 'calculates the discounted revenue for that invoice' do 
+      merch = Merchant.create!(name: "Safeway")
+      customer = Customer.create!(first_name: "Rob", last_name: "Danger")
+      invoice = customer.invoices.create!(status:1)
+      discount1 = merch.discounts.create!(threshold: 5, percentage: 20)
+      discount2 = merch.discounts.create!(threshold: 10, percentage: 70)
+      discount3 = merch.discounts.create!(threshold: 40, percentage: 50)
+      discount4 = merch.discounts.create!(threshold: 5, percentage: 50)
+      item1 = merch.items.create!(name: "abc", description: "thing", unit_price: 500)
+      item2 = merch.items.create!(name: "efg", description: "other", unit_price: 2300)
+      item3 = merch.items.create!(name: "hij", description: "next", unit_price: 700)
+      ii = item1.invoice_items.create!(invoice_id: invoice.id, quantity: 50, unit_price: item1.unit_price, status: 2)
+      ii2 = item2.invoice_items.create!(invoice_id: invoice.id, quantity: 1, unit_price: item2.unit_price, status: 2)
+      ii3 = item3.invoice_items.create!(invoice_id: invoice.id, quantity: 9, unit_price: item3.unit_price, status: 2)
+      expect(invoice.savings).to eq(20650)
+      expect(invoice.discounted_rev).to eq(129.5)
+    end
+
 
     describe "-class" do
       it "orders invoices by oldest to newest" do
