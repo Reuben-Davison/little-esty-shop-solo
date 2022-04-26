@@ -96,25 +96,25 @@ describe "invoice show page" do
     within("#ii-#{@invoice_item_1.id}") do
       expect(page).to have_content("Soccer Ball")
       expect(page).to have_content("Quantity: 1")
-      expect(page).to have_content("Sold for: $320.0 each")
+      expect(page).to have_content("Sold for: $320.00 each")
       expect(page).to have_content("Status: packaged")
     end
     within("#ii-#{@invoice_item_2.id}") do
       expect(page).to have_content("Cup")
       expect(page).to have_content("Quantity: 50")
-      expect(page).to have_content("Sold for: $100.0 each")
+      expect(page).to have_content("Sold for: $100.00 each")
       expect(page).to have_content("Status: packaged")
     end
     within("#invoice_items") do
       expect(page).not_to have_content("Beer")
       expect(page).not_to have_content("Quantity: 2")
-      expect(page).not_to have_content("Sold for: $1.0 each")
+      expect(page).not_to have_content("Sold for: $1.00 each")
     end
   end
 
   it "displays the total revenue to be made by all items on the invoice", :vcr do
     within("#total_revenue") do
-      expect(page).to have_content("Total: $5320.0")
+      expect(page).to have_content("Total: $5320.00")
     end
   end
 
@@ -136,6 +136,7 @@ describe "invoice show page" do
 
   it 'displays discounted revenue' do 
     within("#discounted_rev") do 
+      save_and_open_page
       expect(page).to have_content("Discounted revenue: $2820")
     end
   end

@@ -20,7 +20,7 @@
   <div id="ii-<%= ii.id %>">
     <h2><%= ii.item.name %></h2>
     <p>Quantity: <strong><%= ii.quantity %></strong></p>
-    <p>Sold for: <strong>$<%= ii.unit_price / 100.0 %></strong> each</p>
+    <p>Sold for: <strong>$<%= '%.2f' % (ii.unit_price / 100.0) %></strong> each</p>
     <p>Status: <strong><%= ii.status %></strong></p>
     <p>Status:<%= form_with url: "/merchants/#{ii.merchant.id}/invoice_items/#{ii.id}", method: :patch, local: true do |f| %>
       <%= f.select(:status, ['pending', 'packaged', 'shipped'], selected: "#{ii.status}") %>
@@ -31,9 +31,9 @@
 <% end %>
 
 <div id="total_revenue">
-  <h1> Total: $<%= @invoice.invoice_total %> </h1>
+  <h1> Total: $<%= '%.2f' % @invoice.invoice_total %> </h1>
 </div>
 
 <div id="discounted_rev">
-<h2>Discounted revenue: $<%= @invoice.discounted_rev %></h2>
+<h2>Discounted revenue: $<%= '%.2f' % @invoice.discounted_rev %></h2>
 </div>
