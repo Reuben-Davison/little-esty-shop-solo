@@ -181,10 +181,10 @@ RSpec.describe Invoice do
     ii = item1.invoice_items.create!(invoice_id: invoice.id, quantity: 50, unit_price: item1.unit_price, status: 2)
     ii2 = item2.invoice_items.create!(invoice_id: invoice.id, quantity: 1, unit_price: item2.unit_price, status: 2)
     ii3 = item3.invoice_items.create!(invoice_id: invoice.id, quantity: 9, unit_price: item3.unit_price, status: 2)
-    expect(invoice.merch_savings(merch)).to eq(175.0)
-    expect(invoice.merch_savings(merch2)).to eq(31.5)
-    expect(invoice.merch_discounted_rev(merch)).to eq(98.0)
-    expect(invoice.merch_discounted_rev(merch2)).to eq(31.5)
+    expect(invoice.merch_savings(merch, invoice)).to eq(175.0)
+    expect(invoice.merch_savings(merch2, invoice)).to eq(31.5)
+    expect(invoice.merch_discounted_rev(merch, invoice)).to eq(98.0)
+    expect(invoice.merch_discounted_rev(merch2, invoice)).to eq(31.5)
   end
 
   it 'calculates the total of each merchant on an invoice' do 
@@ -202,7 +202,7 @@ RSpec.describe Invoice do
     ii = item1.invoice_items.create!(invoice_id: invoice.id, quantity: 50, unit_price: item1.unit_price, status: 2)
     ii2 = item2.invoice_items.create!(invoice_id: invoice.id, quantity: 1, unit_price: item2.unit_price, status: 2)
     ii3 = item3.invoice_items.create!(invoice_id: invoice.id, quantity: 9, unit_price: item3.unit_price, status: 2)
-    expect(invoice.merch_invoice_total(merch)).to eq(273)
-    expect(invoice.merch_invoice_total(merch2)).to eq(63)
+    expect(invoice.merch_invoice_total(merch, invoice)).to eq(273)
+    expect(invoice.merch_invoice_total(merch2, invoice)).to eq(63)
   end
 end
