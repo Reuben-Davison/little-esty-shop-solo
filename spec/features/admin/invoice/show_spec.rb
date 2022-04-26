@@ -126,7 +126,7 @@ RSpec.describe "Invoice Show Page" do
     within("#ii-#{@invoice_item_1.id}") do
       expect(page).to have_content("Soccer Ball")
       expect(page).to have_content("Quantity: 1")
-      expect(page).to have_content("Sold for: $320.0 each")
+      expect(page).to have_content("Sold for: $320.00 each")
       expect(page).to have_content("Status: packaged")
     end
   end

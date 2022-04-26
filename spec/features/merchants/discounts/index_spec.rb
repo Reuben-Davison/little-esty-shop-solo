@@ -41,5 +41,8 @@ RSpec.describe "Discounts index page" do
         end 
         expect(current_path).to eq("/merchants/#{merch1.id}/discounts")
         expect(page).to_not have_content("#{discount1.id}")
+        expect(page).to have_content("#{discount2.id}")
+        expect(page).to have_content("#{discount3.id}")
+        expect(page).to have_content("#{discount4.id}")
     end
 end
