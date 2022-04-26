@@ -34,6 +34,12 @@
   <h1> Total: $<%= '%.2f' % @invoice.invoice_total %> </h1>
 </div>
 
+<div id="merchant_rev">
+<% @invoice.merchants.uniq.each do |merchant| %>
+<h2> <%= merchant.name %>'s total revenue: $<%= '%.2f' % @invoice.merch_invoice_total(merchant, @invoice) %></h2>
+<% end %>
+</div>
+
 <div id="discounted_rev">
 <% @invoice.merchants.uniq.each do |merchant| %>
 <h2> <%= merchant.name %>'s discounted revenue: $<%= '%.2f' % @invoice.merch_discounted_rev(merchant, @invoice) %></h2>

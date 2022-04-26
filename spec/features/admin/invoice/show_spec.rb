@@ -130,4 +130,6 @@ RSpec.describe "Invoice Show Page" do
       expect(page).to have_content("Status: packaged")
     end
   end
+
+  it "has the total revenue to that invoice"
 end

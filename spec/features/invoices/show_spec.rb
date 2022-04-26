@@ -118,6 +118,12 @@ describe "invoice show page" do
     end
   end
 
+  it "displays the total revenue by merchant", :vcr do
+    within("#merchant_rev") do
+      expect(page).to have_content("total revenue: $5320.00")
+    end
+  end
+
   it "invoice item statuses are select fields", :vcr do
     within("#ii-#{@invoice_item_1.id}") do
       expect(find("form")).to have_content("pending packaged shipped")
@@ -136,7 +142,6 @@ describe "invoice show page" do
 
   it 'displays discounted revenue' do 
     within("#discounted_rev") do 
-      binding.pry
       expect(page).to have_content("Store Store's discounted revenue: $2820")
     end
   end
