@@ -45,4 +45,17 @@ RSpec.describe "Discounts index page" do
         expect(page).to have_content("#{discount3.id}")
         expect(page).to have_content("#{discount4.id}")
     end
+
+    it "displays the upcoming holidays" do 
+        merch1 = Merchant.create!(name: "Rob")
+        merch1.discounts.create!(threshold: 10, percentage: 25)
+        merch1.discounts.create!(threshold: 5, percentage: 5)
+        merch1.discounts.create!(threshold: 5, percentage: 5)
+        merch1.discounts.create!(threshold: 5, percentage: 5)
+        visit "merchants/#{merch1.id}/discounts/"
+        expect(page).to have_content("Upcoming Holidays")
+        expect(page).to have_content("Memorial Day")
+        expect(page).to have_content("Independence Day")
+
+    end
 end

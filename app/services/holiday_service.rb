@@ -1,7 +1,7 @@
 class HolidayService 
     
     def get_holidays
-        get_url('api/v3/PublicHolidays/2022/US')
+        get_url('api/v3/NextPublicHolidays/US')
     end
 
     def get_url(url)
